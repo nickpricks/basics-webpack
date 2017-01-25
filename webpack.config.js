@@ -19,7 +19,7 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         include: path.resolve(appDir, 'app'),
@@ -41,7 +41,19 @@ module.exports = {
         include: path.resolve(appDir, 'app'),
         exclude: /node_modules/
       },
-      { test: /\.css$/, loader: 'style!css' }
+      // { test: /\.css$/, loader: 'style!css' },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          }
+        ]
+      }
     ]
   },
 
@@ -49,16 +61,15 @@ module.exports = {
     new CleanPlugin([assetsPath], { root: appDir }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
-  ]
+  ],
 
-  /***
-   devServer: {
-    host: '192.168.1.195',
-    contentBase: assetsPath,
+  devServer: {
+    host: '0.0.0.0',
+    // contentBase: assetsPath,
     compress: true,
     inline: false,
     hot: true,
     port: 9000
   }
-  */
+
 };
